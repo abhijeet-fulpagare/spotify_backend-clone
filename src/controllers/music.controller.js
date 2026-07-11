@@ -1,6 +1,6 @@
 const {uploadImage} = require("../services/storage.service")
 const musicModel = require("../models/music.model")
-
+const albumModel = require("../models/album.model");
 
 const uploadMusic = async (req, res) => {
 
@@ -41,4 +41,34 @@ const uploadMusic = async (req, res) => {
     }
 }
 
-module.exports = {uploadMusic}
+const CreateAlbum = async (req, res) => {
+    const user = req.user.id;
+    const { title, musics } = req.body;
+
+    if (!title) {
+        return res.status(400).json({
+            message: "Title is required"
+        });
+    }
+
+    try {
+        const album = await albumModel.create({
+            title,
+            musics,
+            artist: user
+        });
+
+        return res.status(201).json({
+            message: "Album created successfully",
+            album
+        });
+    } catch (e) {
+        console.error(e);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};
+
+module.exports = { uploadMusic, CreateAlbum }
