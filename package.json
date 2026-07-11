@@ -1,0 +1,27 @@
+{
+  "name": "spotify_backend-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhijeet-fulpagare/spotify_backend-clone.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/abhijeet-fulpagare/spotify_backend-clone/issues"
+  },
+  "homepage": "https://github.com/abhijeet-fulpagare/spotify_backend-clone#readme",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "mongoose": "^9.7.4",
+    "nodemon": "^3.1.14"
+  }
+}
