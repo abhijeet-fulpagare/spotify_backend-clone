@@ -54,4 +54,54 @@ const userRegister = async (req, res) => {
     
 }
 
-module.exports = { userRegister };
+const loginUser = async(req, res) =>{
+    const { username, email, password } = req.body;
+
+    try {
+        const user = await userModel.findOne({
+            $or: [
+                { username },
+                {email}
+            ]
+        })
+
+        if (!user)
+        {
+            return res.status(401).json({
+                message:"Invalid Credentials"
+            })
+        }
+
+        const isvalid = await bcrypt.compare(password, user.password);
+
+        if (!isvalid)
+        {
+            return res.status(401).json({
+                message: "Invalid Credentials"
+            })
+        }
+        
+        const token = jwt.sign({ id: user._id, role: user.role },
+            process.env.JWT_SECRET
+        )
+
+        res.cookie("token", token);
+        
+        res.status(201).json({
+            message: "User Login Successfully",
+            user: {
+                username: user.username,
+                email: user.email,
+                role: user.role,
+            }
+        });
+            
+    } catch (e) {
+        return res.status(500).json({
+            message: "Internal Server Error",
+        });
+    }
+
+}
+
+module.exports = { userRegister , loginUser };
