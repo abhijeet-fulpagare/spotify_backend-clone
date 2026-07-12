@@ -73,9 +73,53 @@ const CreateAlbum = async (req, res) => {
 
 
 const getMusic = async (req, res) => {
-    const data = await musicModel.find().populate()
+    const data = await musicModel
+        .find()
+        .limit(10)
+        .populate("artist");
 
-    res.status(200).json({ message: "Music data:", data:data });
-}
+    res.status(200).json({
+        message: "Music data",
+        data,
+    });
+};
 
-module.exports = { uploadMusic, CreateAlbum, getMusic }
+const getAlbumTitle = async (req, res) => {
+    const data = await albumModel
+        .find()
+        .select("title")
+        .populate("musics");
+
+    res.status(200).json({
+        message: "Album data",
+        data,
+    });
+};
+
+const getAlbumById = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const data = await albumModel
+            .findById(id)
+            .populate("musics")
+            .populate("artist");
+
+        if (!data) {
+            return res.status(404).json({
+                message: "Album not found",
+            });
+        }
+
+        res.status(200).json({
+            message: "Album fetched successfully",
+            data,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+};
+
+module.exports = { uploadMusic, CreateAlbum, getMusic, getAlbumTitle, getAlbumById }
