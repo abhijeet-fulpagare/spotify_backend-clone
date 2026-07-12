@@ -71,4 +71,11 @@ const CreateAlbum = async (req, res) => {
     }
 };
 
-module.exports = { uploadMusic, CreateAlbum }
+
+const getMusic = async (req, res) => {
+    const data = await musicModel.find().populate()
+
+    res.status(200).json({ message: "Music data:", data:data });
+}
+
+module.exports = { uploadMusic, CreateAlbum, getMusic }
